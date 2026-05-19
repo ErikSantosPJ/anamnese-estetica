@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Anamnética Integrativa — Estética</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f7f3ef;font-family:'Jost',sans-serif;color:#2c2520;min-height:100vh}
+
+.root{display:flex;flex-direction:column;align-items:center;padding:48px 16px 80px}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:48px}
+.badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:#a07850;border:1px solid #d4b896;padding:6px 20px;margin-bottom:16px}
+.title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,5vw,50px);font-weight:300;line-height:1.1;color:#2c2520}
+.title em{font-style:italic;color:#a07850}
+.subtitle{margin-top:10px;font-size:13px;font-weight:300;color:#7a6a60;letter-spacing:.04em}
+
+/* PROGRESS */
+.progress{width:100%;max-width:700px;margin-bottom:40px}
+.steps{display:flex;justify-content:space-between;position:relative}
+.steps::before{content:'';position:absolute;top:18px;left:18px;right:18px;height:1px;background:#e0d4c8;z-index:0}
+.step{display:flex;flex-direction:column;align-items:center;gap:7px;z-index:1;cursor:pointer}
+.dot{width:36px;height:36px;border-radius:50%;border:1px solid #d4b896;background:#f7f3ef;display:flex;align-items:center;justify-content:center;font-size:13px;color:#c4a882;transition:all .3s}
+.dot.active{background:#a07850;border-color:#a07850;color:#fff;box-shadow:0 0 0 4px rgba(160,120,80,.15)}
+.dot.done{background:#2c2520;border-color:#2c2520;color:#f7f3ef}
+.slabel{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#b0a090;font-weight:500}
+.slabel.active{color:#a07850}
+.slabel.done{color:#2c2520}
+
+/* CARD */
+.card{width:100%;max-width:700px;background:#fff;border:1px solid #e8ddd4;padding:48px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c4a882,#a07850,#7a5c38)}
+
+/* SECTION */
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.eicon{font-size:18px;color:#a07850}
+.enum{font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:#c4a882}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:#2c2520;margin-bottom:4px}
+.sdesc{font-size:13px;color:#8a7a70;font-weight:300;margin-bottom:28px;line-height:1.6}
+.divider{width:40px;height:1px;background:#d4b896;margin:10px 0 28px}
+
+/* FIELD */
+.fg{margin-bottom:26px}
+.flabel{display:block;font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#7a6a60;margin-bottom:8px}
+.flabel .req{color:#a07850}
+.fnote{display:block;font-size:11px;color:#b0a090;font-weight:300;margin-bottom:6px;font-style:italic}
+input[type=text],input[type=email],input[type=date],select,textarea{width:100%;background:#faf8f6;border:1px solid #e0d4c8;padding:13px 15px;font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:#2c2520;outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:1px}
+input:focus,select:focus,textarea:focus{border-color:#a07850;background:#fff}
+textarea{min-height:88px;resize:vertical;line-height:1.6}
+.sel-wrap{position:relative}
+.sel-wrap::after{content:'↓';position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#a07850;font-size:11px;pointer-events:none}
+
+/* GRID */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:560px){.row2,.row3{grid-template-columns:1fr}.card{padding:28px 20px}.steps::before{display:none}.slabel{display:none}}
+
+/* CHECKBOXES */
+.check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:7px}
+.ci{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid #e8ddd4;background:#faf8f6;cursor:pointer;transition:all .2s;user-select:none}
+.ci:hover{border-color:#c4a882;background:#fff}
+.ci.on{border-color:#a07850;background:rgba(160,120,80,.06)}
+.cbox{width:15px;height:15px;min-width:15px;border:1px solid #d4b896;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .2s}
+.ci.on .cbox{background:#a07850;border-color:#a07850;color:#fff}
+.ctext{font-size:13px;font-weight:300;color:#3c3028;line-height:1.3}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px}
+.pill{padding:8px 18px;border:1px solid #e0d4c8;border-radius:40px;font-size:13px;color:#7a6a60;cursor:pointer;transition:all .2s;background:#faf8f6;user-select:none}
+.pill:hover{border-color:#c4a882;color:#2c2520}
+.pill.on{background:#a07850;border-color:#a07850;color:#fff}
+
+/* SCALE */
+.scale-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.snum{width:38px;height:38px;border:1px solid #e0d4c8;background:#faf8f6;font-size:13px;color:#8a7a70;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-family:'Jost',sans-serif;user-select:none}
+.snum:hover{border-color:#c4a882}
+.snum.on{background:#a07850;border-color:#a07850;color:#fff}
+.scale-labels{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:#b0a090;letter-spacing:.04em}
+
+/* FIELDSET BOX */
+.fbox{border:1px solid #e8ddd4;padding:20px 22px;margin-bottom:20px;background:#fdf9f6}
+.ftitle{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#a07850;margin-bottom:14px}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:28px;border-top:1px solid #e8ddd4}
+.btn-back{background:none;border:1px solid #d4b896;color:#8a7a70;padding:11px 26px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-back:hover{border-color:#a07850;color:#a07850}
+.btn-next{background:#2c2520;border:1px solid #2c2520;color:#f7f3ef;padding:13px 38px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:#a07850;border-color:#a07850}
+.btn-submit{background:#a07850;border:1px solid #a07850;color:#fff;padding:13px 44px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-submit:hover{background:#7a5c38;border-color:#7a5c38}
+
+/* CONSENT */
+.consent-box{border:1px solid #e0d4c8;padding:18px 22px;background:#fdf9f6;margin-top:8px}
+.consent-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;color:#2c2520;margin-bottom:8px}
+.consent-text{font-size:12px;color:#7a6a60;line-height:1.7;margin-bottom:14px}
+
+/* SUCCESS */
+.success{width:100%;max-width:700px;background:#fff;border:1px solid #e8ddd4;text-align:center;padding:80px 48px;position:relative;overflow:hidden;display:none}
+.success::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c4a882,#a07850,#7a5c38)}
+.success-icon{font-size:48px;display:block;margin-bottom:24px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#2c2520;margin-bottom:10px}
+.success-msg{font-size:14px;color:#8a7a70;font-weight:300;line-height:1.7;max-width:400px;margin:0 auto 28px}
+.btn-reset{background:none;border:1px solid #d4b896;color:#a07850;padding:11px 30px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.btn-reset:hover{background:#a07850;color:#fff;border-color:#a07850}
+
+/* HIDDEN STEPS */
+.step-panel{display:none}
+.step-panel.active{display:block}
+</style>
+</head>
+<body>
+<div class="root">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">Ficha Anamnética Integrativa</div>
+    <h1 class="title">Cuidar começa por <em>conhecer</em></h1>
+    <p class="subtitle">Preencha com atenção — cada detalhe importa para o seu protocolo personalizado</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress" id="progressBar">
+    <div class="steps">
+      <div class="step" onclick="goToStep(1)">
+        <div class="dot active" id="dot1">✦</div>
+        <span class="slabel active" id="sl1">Identificação</span>
+      </div>
+      <div class="step" onclick="goToStep(2)">
+        <div class="dot" id="dot2">◈</div>
+        <span class="slabel" id="sl2">Saúde Geral</span>
+      </div>
+      <div class="step" onclick="goToStep(3)">
+        <div class="dot" id="dot3">◎</div>
+        <span class="slabel" id="sl3">Pele & Estética</span>
+      </div>
+      <div class="step" onclick="goToStep(4)">
+        <div class="dot" id="dot4">◇</div>
+        <span class="slabel" id="sl4">Hábitos</span>
+      </div>
+      <div class="step" onclick="goToStep(5)">
+        <div class="dot" id="dot5">❋</div>
+        <span class="slabel" id="sl5">Integrativo</span>
+      </div>
+      <div class="step" onclick="goToStep(6)">
+        <div class="dot" id="dot6">→</div>
+        <span class="slabel" id="sl6">Objetivos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card" id="formCard">
+
+    <!-- ── STEP 1 ── -->
+    <div class="step-panel active" id="panel1">
+      <div class="eyebrow"><span class="eicon">✦</span><span class="enum">Etapa 01 — 06</span></div>
+      <h2 class="stitle">Identificação</h2>
+      <p class="sdesc">Dados pessoais e informações de contato da cliente.</p>
+      <div class="divider"></div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Nome completo <span class="req">*</span></label>
+          <input type="text" id="nome" placeholder="Nome da cliente"></div>
+        <div class="fg"><label class="flabel">Data de nascimento <span class="req">*</span></label>
+          <input type="date" id="dataNasc"></div>
+      </div>
+
+      <div class="fg"><label class="flabel">Sexo biológico <span class="req">*</span></label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'sexo')">Feminino</div>
+          <div class="pill" onclick="pill(this,'sexo')">Masculino</div>
+          <div class="pill" onclick="pill(this,'sexo')">Prefiro não informar</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Profissão</label>
+          <input type="text" id="profissao" placeholder="Ex: Professora"></div>
+        <div class="fg"><label class="flabel">Telefone / WhatsApp</label>
+          <input type="text" id="telefone" placeholder="(00) 00000-0000"></div>
+      </div>
+
+      <div class="fg"><label class="flabel">E-mail</label>
+        <input type="email" id="email" placeholder="email@exemplo.com"></div>
+
+      <div class="fg"><label class="flabel">Como nos conheceu?</label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'indicacao')">Indicação</div>
+          <div class="pill" onclick="pill(this,'indicacao')">Instagram</div>
+          <div class="pill" onclick="pill(this,'indicacao')">Google</div>
+          <div class="pill" onclick="pill(this,'indicacao')">TikTok</div>
+          <div class="pill" onclick="pill(this,'indicacao')">Evento</div>
+          <div class="pill" onclick="pill(this,'indicacao')">Outro</div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">É sua primeira vez aqui? <span class="req">*</span></label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'primeiraVez')">Sim, primeira vez</div>
+          <div class="pill" onclick="pill(this,'primeiraVez')">Já fui cliente antes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2 ── -->
+    <div class="step-panel" id="panel2">
+      <div class="eyebrow"><span class="eicon">◈</span><span class="enum">Etapa 02 — 06</span></div>
+      <h2 class="stitle">Saúde Geral</h2>
+      <p class="sdesc">Histórico médico, medicamentos e condições relevantes para os procedimentos.</p>
+      <div class="divider"></div>
+
+      <div class="fg"><label class="flabel">Condições de saúde</label>
+        <span class="fnote">Marque todas que se aplicam</span>
+        <div class="check-grid" id="saude-grid">
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Diabetes</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Hipertensão</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Hipotensão</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Doenças cardíacas</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Doenças autoimunes</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Lúpus</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Vitiligo</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Psoríase</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Rosácea</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Dermatite atópica</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Herpes recorrente</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Epilepsia</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Câncer em tratamento</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Hipotireoidismo</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Hipertireoidismo</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Coagulopatias</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">HIV / Imunossupressão</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Enxaqueca crônica</span></div>
+          <div class="ci" onclick="check(this,'saude')"><div class="cbox">✓</div><span class="ctext">Ansiedade / Depressão</span></div>
+        </div>
+        <input type="text" id="saude_outro" placeholder="Outra condição não listada..." style="margin-top:8px">
+      </div>
+
+      <div class="fg"><label class="flabel">Usa algum medicamento atualmente?</label>
+        <span class="fnote">Inclua suplementos, fitoterápicos e hormônios</span>
+        <textarea id="medicamentos" placeholder="Ex: Roacutan 20mg, anticoncepcional oral (Yaz), vitamina D..."></textarea>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Alergias conhecidas</label>
+          <input type="text" id="alergias" placeholder="Ex: dipirona, látex, fragrâncias..."></div>
+        <div class="fg"><label class="flabel">Cirurgias / procedimentos recentes</label>
+          <input type="text" id="cirurgias" placeholder="Ex: rinoplastia há 6 meses"></div>
+      </div>
+
+      <div class="fbox">
+        <p class="ftitle">Para clientes do sexo feminino</p>
+        <div class="row2">
+          <div class="fg"><label class="flabel">Está gestante?</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'gestante')">Sim</div>
+              <div class="pill" onclick="pill(this,'gestante')">Não</div>
+              <div class="pill" onclick="pill(this,'gestante')">Suspeita</div>
+            </div>
+          </div>
+          <div class="fg"><label class="flabel">Está amamentando?</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'amamentando')">Sim</div>
+              <div class="pill" onclick="pill(this,'amamentando')">Não</div>
+            </div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Usa anticoncepcional?</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'anticoncepcional')">Não</div>
+            <div class="pill" onclick="pill(this,'anticoncepcional')">Oral</div>
+            <div class="pill" onclick="pill(this,'anticoncepcional')">Injetável</div>
+            <div class="pill" onclick="pill(this,'anticoncepcional')">DIU hormonal</div>
+            <div class="pill" onclick="pill(this,'anticoncepcional')">Implante</div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Faz reposição hormonal?</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'hormonal')">Sim</div>
+            <div class="pill" onclick="pill(this,'hormonal')">Não</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 3 ── -->
+    <div class="step-panel" id="panel3">
+      <div class="eyebrow"><span class="eicon">◎</span><span class="enum">Etapa 03 — 06</span></div>
+      <h2 class="stitle">Pele & Estética</h2>
+      <p class="sdesc">Avaliação do tipo de pele, queixas e histórico de tratamentos.</p>
+      <div class="divider"></div>
+
+      <div class="fbox">
+        <p class="ftitle">Características da pele</p>
+        <div class="row2">
+          <div class="fg"><label class="flabel">Tipo de pele (autopercepção)</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'tipoPele')">Normal</div>
+              <div class="pill" onclick="pill(this,'tipoPele')">Seca</div>
+              <div class="pill" onclick="pill(this,'tipoPele')">Oleosa</div>
+              <div class="pill" onclick="pill(this,'tipoPele')">Mista</div>
+              <div class="pill" onclick="pill(this,'tipoPele')">Não sei</div>
+            </div>
+          </div>
+          <div class="fg"><label class="flabel">Sensibilidade</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'sensibilidade')">Pouca</div>
+              <div class="pill" onclick="pill(this,'sensibilidade')">Moderada</div>
+              <div class="pill" onclick="pill(this,'sensibilidade')">Alta</div>
+              <div class="pill" onclick="pill(this,'sensibilidade')">Reativa</div>
+            </div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Fototipo (Fitzpatrick)</label>
+          <span class="fnote">Aproximado — será avaliado na consulta</span>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'fototipo')">I</div>
+            <div class="pill" onclick="pill(this,'fototipo')">II</div>
+            <div class="pill" onclick="pill(this,'fototipo')">III</div>
+            <div class="pill" onclick="pill(this,'fototipo')">IV</div>
+            <div class="pill" onclick="pill(this,'fototipo')">V</div>
+            <div class="pill" onclick="pill(this,'fototipo')">VI</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Principais queixas estéticas</label>
+        <span class="fnote">Marque todas as que deseja tratar</span>
+        <div class="check-grid">
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Acne / comedões</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Manchas (melasma)</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Manchas pós-inflamatórias</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Poros dilatados</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Rugas finas</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Flacidez facial</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Flacidez corporal</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Celulite</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Estrias</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Olheiras</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Pele opaca / sem viço</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Ressecamento intenso</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Sensibilidade / vermelhidão</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Hiperidrose</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Pelos encravados</span></div>
+          <div class="ci" onclick="check(this,'queixa')"><div class="cbox">✓</div><span class="ctext">Hirsutismo</span></div>
+        </div>
+        <input type="text" id="queixa_outro" placeholder="Outra queixa não listada..." style="margin-top:8px">
+      </div>
+
+      <div class="fg"><label class="flabel">Tratamentos estéticos anteriores</label>
+        <span class="fnote">O que já realizou?</span>
+        <div class="check-grid">
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Peeling químico</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Microagulhamento</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Laser</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Luz intensa pulsada (IPL)</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Ultrassom</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Radiofrequência</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Criolipólise</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Toxina botulínica</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Preenchimento</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Limpeza de pele</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Drenagem linfática</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Massagem modeladora</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Carboxiterapia</span></div>
+          <div class="ci" onclick="check(this,'trat')"><div class="cbox">✓</div><span class="ctext">Mesoterapia</span></div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Já teve alguma reação adversa a tratamento?</label>
+        <textarea id="reacao" placeholder="Descreva a reação e o procedimento que a causou..."></textarea>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Usa ácidos na rotina?</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'acido')">Sim</div>
+            <div class="pill" onclick="pill(this,'acido')">Não</div>
+            <div class="pill" onclick="pill(this,'acido')">Às vezes</div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Usa retinol / retinóide?</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'retinol')">Sim</div>
+            <div class="pill" onclick="pill(this,'retinol')">Não</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Exposição solar</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'solar')">Mínima</div>
+            <div class="pill" onclick="pill(this,'solar')">Moderada</div>
+            <div class="pill" onclick="pill(this,'solar')">Alta</div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Usa protetor solar?</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'protetor')">Sim, sempre</div>
+            <div class="pill" onclick="pill(this,'protetor')">Às vezes</div>
+            <div class="pill" onclick="pill(this,'protetor')">Raramente</div>
+            <div class="pill" onclick="pill(this,'protetor')">Não uso</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Produtos que usa atualmente na pele</label>
+        <span class="fnote">Marca e tipo, se souber</span>
+        <textarea id="produtos" placeholder="Ex: Hidratante Cetaphil, sérum vitamina C La Roche-Posay..."></textarea>
+      </div>
+    </div>
+
+    <!-- ── STEP 4 ── -->
+    <div class="step-panel" id="panel4">
+      <div class="eyebrow"><span class="eicon">◇</span><span class="enum">Etapa 04 — 06</span></div>
+      <h2 class="stitle">Hábitos de Vida</h2>
+      <p class="sdesc">Estilo de vida e rotina diária que influenciam diretamente na pele e nos resultados.</p>
+      <div class="divider"></div>
+
+      <div class="fg"><label class="flabel">Consumo diário de água</label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'agua')">Menos de 1 litro</div>
+          <div class="pill" onclick="pill(this,'agua')">1 – 1,5 litros</div>
+          <div class="pill" onclick="pill(this,'agua')">1,5 – 2 litros</div>
+          <div class="pill" onclick="pill(this,'agua')">Mais de 2 litros</div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Como você descreveria sua alimentação?</label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'alim')">Muito processada</div>
+          <div class="pill" onclick="pill(this,'alim')">Desequilibrada</div>
+          <div class="pill" onclick="pill(this,'alim')">Razoável</div>
+          <div class="pill" onclick="pill(this,'alim')">Equilibrada</div>
+          <div class="pill" onclick="pill(this,'alim')">Muito saudável</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Atividade física</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'ativ')">Não pratica</div>
+            <div class="pill" onclick="pill(this,'ativ')">1 – 2x / semana</div>
+            <div class="pill" onclick="pill(this,'ativ')">3 – 4x / semana</div>
+            <div class="pill" onclick="pill(this,'ativ')">5x ou mais</div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Tabagismo</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'tabag')">Não</div>
+            <div class="pill" onclick="pill(this,'tabag')">Sim</div>
+            <div class="pill" onclick="pill(this,'tabag')">Ex-fumante</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="fg"><label class="flabel">Consumo de álcool</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'alcool')">Não</div>
+            <div class="pill" onclick="pill(this,'alcool')">Raramente</div>
+            <div class="pill" onclick="pill(this,'alcool')">Fins de semana</div>
+            <div class="pill" onclick="pill(this,'alcool')">Frequentemente</div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Funcionamento intestinal</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'intestino')">Regular</div>
+            <div class="pill" onclick="pill(this,'intestino')">Preso</div>
+            <div class="pill" onclick="pill(this,'intestino')">Irregular</div>
+            <div class="pill" onclick="pill(this,'intestino')">Diarreia frequente</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Qualidade do sono</label>
+        <span class="fnote">De 1 (péssimo) a 10 (excelente)</span>
+        <div class="scale-row" id="scale-sono"></div>
+        <div class="scale-labels"><span>Péssimo</span><span>Excelente</span></div>
+      </div>
+
+      <div class="fg"><label class="flabel">Nível de estresse do dia a dia</label>
+        <span class="fnote">De 1 (mínimo) a 10 (máximo)</span>
+        <div class="scale-row" id="scale-stress"></div>
+        <div class="scale-labels"><span>Mínimo</span><span>Máximo</span></div>
+      </div>
+    </div>
+
+    <!-- ── STEP 5 ── -->
+    <div class="step-panel" id="panel5">
+      <div class="eyebrow"><span class="eicon">❋</span><span class="enum">Etapa 05 — 06</span></div>
+      <h2 class="stitle">Avaliação Integrativa</h2>
+      <p class="sdesc">Saúde emocional e sinais sistêmicos que se refletem na pele e no corpo.</p>
+      <div class="divider"></div>
+
+      <div class="fg"><label class="flabel">Estado emocional atual</label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'emoc')">Ótimo</div>
+          <div class="pill" onclick="pill(this,'emoc')">Estável</div>
+          <div class="pill" onclick="pill(this,'emoc')">Ansioso(a)</div>
+          <div class="pill" onclick="pill(this,'emoc')">Estressado(a)</div>
+          <div class="pill" onclick="pill(this,'emoc')">Esgotado(a)</div>
+          <div class="pill" onclick="pill(this,'emoc')">Deprimido(a)</div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Nível de energia ao longo do dia</label>
+        <span class="fnote">De 1 (sem energia) a 10 (pleno vigor)</span>
+        <div class="scale-row" id="scale-energia"></div>
+        <div class="scale-labels"><span>Sem energia</span><span>Pleno vigor</span></div>
+      </div>
+
+      <div class="fbox">
+        <p class="ftitle">Saúde hormonal e feminina</p>
+        <div class="fg"><label class="flabel">Regularidade do ciclo menstrual</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'ciclo')">Regular</div>
+            <div class="pill" onclick="pill(this,'ciclo')">Irregular</div>
+            <div class="pill" onclick="pill(this,'ciclo')">Em menopausa</div>
+            <div class="pill" onclick="pill(this,'ciclo')">Não se aplica</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label class="flabel">Queda de cabelo</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'cabelo')">Normal</div>
+              <div class="pill" onclick="pill(this,'cabelo')">Moderada</div>
+              <div class="pill" onclick="pill(this,'cabelo')">Intensa</div>
+            </div>
+          </div>
+          <div class="fg"><label class="flabel">Estado das unhas</label>
+            <div class="pills">
+              <div class="pill" onclick="pill(this,'unhas')">Saudáveis</div>
+              <div class="pill" onclick="pill(this,'unhas')">Quebradiças</div>
+              <div class="pill" onclick="pill(this,'unhas')">Descamando</div>
+              <div class="pill" onclick="pill(this,'unhas')">Fracas</div>
+            </div>
+          </div>
+        </div>
+        <div class="fg"><label class="flabel">Variação de peso recente</label>
+          <div class="pills">
+            <div class="pill" onclick="pill(this,'peso')">Estável</div>
+            <div class="pill" onclick="pill(this,'peso')">Ganho recente</div>
+            <div class="pill" onclick="pill(this,'peso')">Perda recente</div>
+            <div class="pill" onclick="pill(this,'peso')">Oscila muito</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Observações integrativas livres</label>
+        <span class="fnote">Algo relevante que não foi perguntado ainda</span>
+        <textarea id="obs_integ" placeholder="Compartilhe o que quiser — tudo que nos ajuda a cuidar melhor de você..." style="min-height:100px"></textarea>
+      </div>
+    </div>
+
+    <!-- ── STEP 6 ── -->
+    <div class="step-panel" id="panel6">
+      <div class="eyebrow"><span class="eicon">→</span><span class="enum">Etapa 06 — 06</span></div>
+      <h2 class="stitle">Objetivos & Expectativas</h2>
+      <p class="sdesc">O que você deseja alcançar com os tratamentos? Isso guiará todo o nosso protocolo.</p>
+      <div class="divider"></div>
+
+      <div class="fg"><label class="flabel">Objetivos principais</label>
+        <span class="fnote">Selecione os que mais importam para você</span>
+        <div class="check-grid">
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Tratar acne</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Reduzir manchas</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Rejuvenescimento facial</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Uniformizar o tom</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Reduzir poros</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Hidratação profunda</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Firmeza e contorno</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Redução de medidas</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Tratar celulite</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Eliminar estrias</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Relaxamento e bem-estar</span></div>
+          <div class="ci" onclick="check(this,'obj')"><div class="cbox">✓</div><span class="ctext">Prevenção do envelhecimento</span></div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Expectativa com os tratamentos <span class="req">*</span></label>
+        <textarea id="expectativa" placeholder="Descreva o que você espera alcançar, como se sente em relação à sua pele / corpo hoje..." style="min-height:100px"></textarea>
+      </div>
+
+      <div class="fg"><label class="flabel">Prazo que você imagina para os resultados</label>
+        <div class="pills">
+          <div class="pill" onclick="pill(this,'prazo')">Resultados rápidos (1–2 meses)</div>
+          <div class="pill" onclick="pill(this,'prazo')">Médio prazo (3–6 meses)</div>
+          <div class="pill" onclick="pill(this,'prazo')">Longo prazo (6+ meses)</div>
+          <div class="pill" onclick="pill(this,'prazo')">Sem prazo definido</div>
+        </div>
+      </div>
+
+      <div class="fg"><label class="flabel">Algo que contraindicaria algum procedimento?</label>
+        <span class="fnote">Do seu ponto de vista — ex: medo de agulha, claustrofobia...</span>
+        <input type="text" id="contraindicacoes" placeholder="Ex: tenho medo de agulha, não posso ficar deitada por muito tempo...">
+      </div>
+
+      <div class="consent-box">
+        <p class="consent-title">Termo de Ciência e Consentimento</p>
+        <p class="consent-text">Declaro que as informações prestadas são verdadeiras e completas. Estou ciente de que os dados serão utilizados exclusivamente para fins de avaliação estética e elaboração de protocolo de tratamento, mantidos em sigilo e protegidos nos termos da LGPD (Lei 13.709/2018).</p>
+        <div class="ci" id="termoCi" onclick="toggleTermo()" style="width:fit-content">
+          <div class="cbox" id="termoCbox">✓</div>
+          <span class="ctext" style="font-weight:400">Li e concordo com o termo de consentimento</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV BUTTONS -->
+    <div class="nav">
+      <button class="btn-back" id="btnBack" onclick="back()" style="display:none">← Voltar</button>
+      <div></div>
+      <button class="btn-next" id="btnNext" onclick="next()">Continuar →</button>
+      <button class="btn-submit" id="btnSubmit" onclick="submit()" style="display:none">Concluir ficha</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="successScreen">
+    <span class="success-icon">❋</span>
+    <h2 class="success-title">Ficha recebida com carinho</h2>
+    <p class="success-msg" id="successMsg">Obrigada por compartilhar essas informações. Elas são o ponto de partida para um cuidado verdadeiramente personalizado e integrativo.</p>
+    <button class="btn-reset" onclick="reset()">Nova anamnese</button>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 6;
+let termoAceito = false;
+
+// ── SCALE INIT ──
+function buildScale(containerId, name) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.createElement('div');
+    btn.className = 'snum';
+    btn.textContent = i;
+    btn.onclick = function() {
+      el.querySelectorAll('.snum').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+    };
+    el.appendChild(btn);
+  }
+}
+buildScale('scale-sono','sono');
+buildScale('scale-stress','stress');
+buildScale('scale-energia','energia');
+
+// ── PILL (single select) ──
+function pill(el, group) {
+  document.querySelectorAll(`.pill[onclick*="'${group}'"]`).forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ── CHECK (multi select) ──
+function check(el, group) {
+  el.classList.toggle('on');
+}
+
+// ── TERMO ──
+function toggleTermo() {
+  termoAceito = !termoAceito;
+  document.getElementById('termoCi').classList.toggle('on', termoAceito);
+}
+
+// ── NAVIGATION ──
+function updateUI() {
+  for (let i = 1; i <= totalSteps; i++) {
+    document.getElementById('panel' + i).classList.toggle('active', i === currentStep);
+    const dot = document.getElementById('dot' + i);
+    const sl = document.getElementById('sl' + i);
+    dot.className = 'dot' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
+    sl.className = 'slabel' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
+    dot.textContent = i < currentStep ? '✓' : ['✦','◈','◎','◇','❋','→'][i-1];
+  }
+  document.getElementById('btnBack').style.display = currentStep > 1 ? 'inline-block' : 'none';
+  document.getElementById('btnNext').style.display = currentStep < totalSteps ? 'inline-block' : 'none';
+  document.getElementById('btnSubmit').style.display = currentStep === totalSteps ? 'inline-block' : 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function next() {
+  if (currentStep < totalSteps) { currentStep++; updateUI(); }
+}
+
+function back() {
+  if (currentStep > 1) { currentStep--; updateUI(); }
+}
+
+function goToStep(n) {
+  if (n < currentStep) { currentStep = n; updateUI(); }
+}
+
+function submit() {
+  if (!termoAceito) {
+    alert('Por favor, aceite o termo de consentimento para finalizar.');
+    return;
+  }
+  const nome = document.getElementById('nome').value.trim();
+  const firstName = nome ? nome.split(' ')[0] : 'cliente';
+  document.getElementById('successMsg').innerHTML =
+    `Obrigada por compartilhar essas informações, <strong>${firstName}</strong>. Elas são o ponto de partida para um cuidado verdadeiramente personalizado e integrativo.`;
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function reset() {
+  currentStep = 1;
+  termoAceito = false;
+  document.getElementById('termoCi').classList.remove('on');
+  document.querySelectorAll('input[type=text], input[type=email], input[type=date], textarea')
+    .forEach(el => el.value = '');
+  document.querySelectorAll('.pill.on').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.ci.on').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.snum.on').forEach(el => el.classList.remove('on'));
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('progressBar').style.display = 'block';
+  document.getElementById('successScreen').style.display = 'none';
+  updateUI();
+}
+
+updateUI();
+</script>
+</body>
+</html>
